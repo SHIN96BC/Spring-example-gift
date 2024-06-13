@@ -12,6 +12,7 @@
     <div>
         <img src="https://img.shields.io/badge/Java(v17)-000000?style=flat&logo=openjdk&logoColor=white"/>
         <img src="https://img.shields.io/badge/Spring Boot(v3.3.0)-6DB33F?style=flat&logo=springboot&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=gradle&logoColor=white"/>
     </div>
     <div>
         <img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=flat&logo=spring&logoColor=white"/>
