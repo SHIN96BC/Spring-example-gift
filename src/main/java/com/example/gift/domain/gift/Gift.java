@@ -109,4 +109,46 @@ public class Gift extends AbstractEntity {
         this.paidAt = ZonedDateTime.now();
     }
 
+    public void pushLink() {
+        if (this.status != Status.ORDER_COMPLETE) throw new IllegalStatusException("Gift pushLink");
+        this.status = Status.PUSH_COMPLETE;
+        this.pushedAt = ZonedDateTime.now();
+    }
+
+    public void accept(GiftCommand.Accept request) {
+        var receiverName = request.getReceiverName();
+        var receiverPhone = request.getReceiverPhone();
+        var receiverZipcode = request.getReceiverZipcode();
+        var receiverAddress1 = request.getReceiverAddress1();
+        var receiverAddress2 = request.getReceiverAddress2();
+        var etcMessage = request.getEtcMessage();
+
+        if (!availableAccept()) throw new IllegalStatusException();
+        if (StringUtils.isEmpty(receiverName)) throw new InvalidParamException("Gift accept receiverName is empty");
+        if (StringUtils.isEmpty(receiverPhone)) throw new InvalidParamException("Gift accept receiverPhone is empty");
+        if (StringUtils.isEmpty(receiverZipcode)) throw new InvalidParamException("Gift accept receiverZipcode is empty");
+        if (StringUtils.isEmpty(receiverAddress1)) throw new InvalidParamException("Gift accept receiverAddress1 is empty");
+        if (StringUtils.isEmpty(receiverAddress2)) throw new InvalidParamException("Gift accept receiverAddress2 is empty");
+        if (StringUtils.isEmpty(etcMessage)) throw new InvalidParamException("Gift accept etcMessage is empty");
+
+        this.status = Status.ACCEPT;
+        this.receiverName = receiverName;
+        this.receiverPhone = receiverPhone;
+        this.receiverZipcode = receiverZipcode;
+        this.receiverAddress1 = receiverAddress1;
+        this.receiverAddress2 = receiverAddress2;
+        this.etcMessage = etcMessage;
+        this.acceptedAt = ZonedDateTime.now();
+    }
+
+    public void expired() {
+        this.status = Status.EXPIRATION;
+        this.expiredAt = ZonedDateTime.now();
+    }
+
+    private boolean availableAccept() {
+        if (this.expiredAt.isBefore(ZonedDateTime.now())) return false;
+        return this.status == Status.ORDER_COMPLETE || this.status == Status.PUSH_COMPLETE;
+    }
+
 }
