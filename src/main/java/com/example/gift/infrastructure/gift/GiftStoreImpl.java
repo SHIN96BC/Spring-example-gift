@@ -1,5 +1,6 @@
 package com.example.gift.infrastructure.gift;
 
+import com.example.gift.common.exception.InvalidParamException;
 import com.example.gift.domain.gift.Gift;
 import com.example.gift.domain.gift.GiftStore;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +12,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class GiftStoreImpl implements GiftStore {
 
+    private final GiftRepository giftRepository;
+
     @Override
     public Gift store(Gift gift) {
-        return null;
+        if (gift == null) throw new InvalidParamException();
+
+        return giftRepository.save(gift);
     }
 
 }
